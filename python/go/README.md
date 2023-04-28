@@ -13,3 +13,7 @@ https://zetcode.com/golang/mysql/
 # CRUD
 
 <https://dev.to/yanoandri/database-handling-with-golang-gorm-crud-handling-4c66>
+
+## Read go package docs
+
+<https://www.makeuseof.com/go-godoc-document-code-automatically/>
