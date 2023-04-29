@@ -64,5 +64,9 @@ func GetUsers(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var users []models.User
 	db.Find(&users)
-	c.JSON(http.StatusOK, gin.H{"data": users})
+	response := []UserInputResponse{}
+	for _, user := range users {
+		response = append(response, UserInputResponse{user.Email, user.ID})
+	}
+	c.JSON(http.StatusOK, gin.H{"data": response})
 }
