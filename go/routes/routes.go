@@ -17,5 +17,6 @@ func SetupRoutes(db *gorm.DB) (*gin.Engine){
 	router.GET("/user/:id", controllers.GetUser)
 	router.GET("/users", controllers.GetUsers)
 	router.DELETE("/user/:id", controllers.DeleteUser)
+	router.PATCH("/user/:id", controllers.UpdateUser)
 	return router
 }

@@ -70,3 +70,20 @@ func GetUsers(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": response})
 }
+
+func UpdateUser(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+	var user models.User
+	if err := db.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found!"})
+		return
+	}
+	var input UserInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	update := models.User{ID: user.ID, Email: input.Email, Password: input.Password}
+	db.Save(&update)
+	c.JSON(http.StatusOK, gin.H{"data": "Record updated"})
+}
