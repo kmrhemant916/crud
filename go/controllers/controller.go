@@ -37,6 +37,18 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"data": response})
 }
 
+func GetUser(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+	var user models.User
+	if err := db.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found!"})
+		return
+	}
+	db.Find(&user)
+	response := UserInputResponse{ID: user.ID, Email: user.Email}
+	c.JSON(http.StatusOK, gin.H{"data": response})
+}
+
 func DeleteUser(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var user models.User
@@ -46,4 +58,11 @@ func DeleteUser(c *gin.Context) {
 	}
 	db.Delete(&user)
 	c.JSON(http.StatusOK, gin.H{"data": true})
+}
+
+func GetUsers(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+	var users []models.User
+	db.Find(&users)
+	c.JSON(http.StatusOK, gin.H{"data": users})
 }
